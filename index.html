@@ -32,7 +32,8 @@
         </div>
 
         <div class="main-content">
-            <div>
+            <div class="form-chart-wrapper">
+                <!-- Form Tambah Transaksi -->
                 <div class="form-container">
                     <h2>Tambah Transaksi</h2>
                     <div class="form-group">
@@ -53,6 +54,10 @@
                     <button @click="addTransaction()">Tambah Transaksi</button>
                 </div>
 
+                <!-- Grafik Keuangan -->
+                
+            </div>
+            
                 <div class="transactions">
                     <h2>Riwayat Transaksi</h2>
                     <template x-if="transactions.length === 0">
@@ -68,11 +73,10 @@
                         </div>
                     </template>
                 </div>
-            </div>
-
-            <div class="chart-container">
-                <h2>Grafik Keuangan</h2>
-                <canvas id="transactionChart"></canvas>
+                <div class="chart-container">
+                    <h2>Grafik Keuangan</h2>
+                    <canvas id="transactionChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
