@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Keuangan Pribadi</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
     <div class="container" x-data="financeApp">
         <header>
-            <h1>Aplikasi Keuangan Pribadi</h1>
+            <h1 class="text-primary fw-bold">Aplikasi Keuangan Pribadi</h1>
             <p>Kelola pemasukan dan pengeluaran Anda dengan mudah</p>
         </header>
 
@@ -23,11 +24,11 @@
         <div class="summary">
             <div class="income-card">
                 <h3>Pemasukan</h3>
-                <p x-text="formatCurrency(totalIncome)"></p>
+                <p class="fs-3" x-text="formatCurrency(totalIncome)"></p>
             </div>
             <div class="expense-card">
                 <h3>Pengeluaran</h3>
-                <p x-text="formatCurrency(totalExpense)"></p>
+                <p class="fs-3" x-text="formatCurrency(totalExpense)"></p>
             </div>
         </div>
 
@@ -51,11 +52,8 @@
                             <option value="expense">Pengeluaran</option>
                         </select>
                     </div>
-                    <button @click="addTransaction()">Tambah Transaksi</button>
+                    <button class="rounded" @click="addTransaction()">Tambah Transaksi</button>
                 </div>
-
-                <!-- Grafik Keuangan -->
-                
             </div>
             
                 <div class="transactions">
@@ -73,7 +71,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="chart-container">
+                <div class="chart-container text-center justify-content-center">
                     <h2>Grafik Keuangan</h2>
                     <canvas id="transactionChart"></canvas>
                 </div>
