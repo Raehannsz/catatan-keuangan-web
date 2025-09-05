@@ -43,8 +43,12 @@
                     </div>
                     <div class="form-group">
                         <label for="amount">Jumlah (Rp)</label>
-                            <input type="number" id="amount" x-model="amount" placeholder="Contoh: 2500000">
-                        </div>
+                        <input type="number" id="amount" x-model="amount" placeholder="Contoh: 2500000">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Tanggal</label>
+                        <input type="date" id="date" x-model="date">
+                    </div>
                     <div class="form-group">
                         <label for="type">Jenis Transaksi</label>
                         <select id="type" x-model="type">
@@ -56,6 +60,18 @@
                 </div>
             </div>
             
+            <div class="filter-container mb-4">
+    <label for="monthFilter" class="form-label fw-bold">Tampilkan Bulan:</label>
+    <select id="monthFilter" class="form-select w-auto d-inline-block"
+        x-model="selectedMonth" @change="filterTransactions">
+        <option value="">Semua Bulan</option>
+        <template x-for="month in availableMonths" :key="month.value">
+            <option :value="month.value" x-text="month.label"></option>
+        </template>
+    </select>
+</div>
+
+
                 <div class="transactions">
                     <h2>Riwayat Transaksi</h2>
                     <template x-if="transactions.length === 0">
@@ -65,7 +81,10 @@
                     </template>
                     <template x-for="(transaction, index) in transactions" :key="index">
                         <div class="transaction-item" :class="transaction.type === 'income' ? 'transaction-income' : 'transaction-expense'">
-                            <div class="transaction-desc" x-text="transaction.desc"></div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold" x-text="transaction.desc"></div>
+                                <div class="text-muted small" x-text="formatDate(transaction.date)"></div>
+                            </div>
                             <div class="transaction-amount" x-text="formatCurrency(transaction.amount)"></div>
                             <button class="delete-btn" @click="removeTransaction(index)">Hapus</button>
                         </div>

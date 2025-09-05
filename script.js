@@ -2,9 +2,16 @@ document.addEventListener('alpine:init', () => {
             Alpine.data('financeApp', () => ({
                 desc: '',
                 amount: '',
+                date: '',
                 type: 'income',
                 transactions: [],
                 chart: null,
+
+                formatDate(dateStr) {
+                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    return new Date(dateStr).toLocaleDateString('id-ID', options);
+                },
+
                 
                 init() {
                     // Load data dari localStorage jika ada
@@ -42,27 +49,31 @@ document.addEventListener('alpine:init', () => {
                 },
                 
                 addTransaction() {
-                    if (!this.desc.trim() || !this.amount || Number(this.amount) <= 0) {
-                        alert('Deskripsi dan jumlah harus diisi dengan benar!');
+                    if (!this.desc.trim() || !this.amount || !this.date || Number(this.amount) <= 0) {
+                        alert('Deskripsi, jumlah, dan tanggal harus diisi dengan benar!');
                         return;
                     }
-                    
+
                     this.transactions.push({ 
                         desc: this.desc.trim(), 
-                        amount: Number(this.amount), 
-                        type: this.type 
+                        amount: Number(this.amount),
+                        date: this.date,
+                        type: this.type,
                     });
-                    
+
                     // Simpan ke localStorage
                     this.saveTransactions();
-                    
+
                     // Reset form
                     this.desc = '';
                     this.amount = '';
-                    
+                    this.date = '';
+                    this.type = 'income'; // Optional: reset ke default
+
                     // Update chart
                     this.updateChart();
                 },
+
                 
                 removeTransaction(index) {
                     if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
@@ -74,6 +85,11 @@ document.addEventListener('alpine:init', () => {
                 
                 saveTransactions() {
                     localStorage.setItem('financeTransactions', JSON.stringify(this.transactions));
+                },
+
+                formatDate(dateStr) {
+                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    return new Date(dateStr).toLocaleDateString('id-ID', options);
                 },
                 
                 updateChart() {
