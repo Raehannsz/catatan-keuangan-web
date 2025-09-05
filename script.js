@@ -146,7 +146,7 @@ document.addEventListener('alpine:init', () => {
                                     },
                                     title: {
                                         display: true,
-                                        text: 'Distribusi Keuangan Bulanan'
+                                        text: 'Diagram Graphic'
                                     }
                                 }
                             }
