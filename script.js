@@ -6,40 +6,64 @@ document.addEventListener('alpine:init', () => {
                 type: 'income',
                 transactions: [],
                 chart: null,
+                startDate: '',
+                endDate: '',
 
                 formatDate(dateStr) {
                     const options = { year: 'numeric', month: 'long', day: 'numeric' };
                     return new Date(dateStr).toLocaleDateString('id-ID', options);
                 },
 
-                
                 init() {
-                    // Load data dari localStorage jika ada
+                    // Load dari localStorage
                     const savedTransactions = localStorage.getItem('financeTransactions');
                     if (savedTransactions) {
                         this.transactions = JSON.parse(savedTransactions);
                     }
-                    
-                    // Inisialisasi chart setelah Alpine selesai render
+
                     this.$nextTick(() => {
                         this.updateChart();
                     });
+
+                    // 🔁 Pantau perubahan tanggal, lalu update chart
+                    this.$watch('startDate', () => this.updateChart());
+                    this.$watch('endDate', () => this.updateChart());
                 },
+
+                get filteredTransactions() {
+                    if (!this.startDate || !this.endDate) return this.transactions;
+
+                    const start = new Date(this.startDate);
+                    const end = new Date(this.endDate);
+
+                    return this.transactions.filter(t => {
+                        const txDate = new Date(t.date);
+                        return txDate >= start && txDate <= end;
+                    });
+                },
+
+                resetDateFilter() {
+                this.startDate = '';
+                this.endDate = '';
+                this.updateChart(); // agar chart langsung diperbarui
+            },
                 
                 get totalIncome() {
-                    return this.transactions.filter(t => t.type === 'income')
-                                            .reduce((sum, t) => sum + Number(t.amount), 0);
+                    return this.filteredTransactions
+                            .filter(t => t.type === 'income')
+                            .reduce((sum, t) => sum + Number(t.amount), 0);
                 },
                 
                 get totalExpense() {
-                    return this.transactions.filter(t => t.type === 'expense')
-                                            .reduce((sum, t) => sum + Number(t.amount), 0);
+                    return this.filteredTransactions
+                            .filter(t => t.type === 'expense')
+                            .reduce((sum, t) => sum + Number(t.amount), 0);
                 },
-                
+
                 get balance() {
                     return this.totalIncome - this.totalExpense;
                 },
-                
+
                 formatCurrency(amount) {
                     return new Intl.NumberFormat('id-ID', {
                         style: 'currency',
@@ -93,44 +117,45 @@ document.addEventListener('alpine:init', () => {
                 },
                 
                 updateChart() {
-                    const incomes = this.totalIncome;
-                    const expenses = this.totalExpense;
-                    
-                    const ctx = document.getElementById('transactionChart').getContext('2d');
-                    
-                    // Hancurkan chart sebelumnya jika ada
-                    if (this.chart) {
-                        this.chart.destroy();
-                    }
-                    
-                    // Buat chart baru
-                    this.chart = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Pemasukan', 'Pengeluaran'],
-                            datasets: [{
-                                label: 'Transaksi',
-                                data: [incomes, expenses],
-                                backgroundColor: ['#34d399', '#f87171'],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'bottom',
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: (context) => {
-                                            return `${context.label}: ${this.formatCurrency(context.raw)}`;
-                                        }
+                    const incomeTotal = this.filteredTransactions
+                        .filter(t => t.type === 'income')
+                        .reduce((acc, t) => acc + t.amount, 0);
+
+                    const expenseTotal = this.filteredTransactions
+                        .filter(t => t.type === 'expense')
+                        .reduce((acc, t) => acc + t.amount, 0);
+
+                    const data = {
+                        labels: ['Pemasukan', 'Pengeluaran'],
+                        datasets: [{
+                            data: [incomeTotal, expenseTotal],
+                            backgroundColor: ['#34d399', '#f87171'],
+                        }]
+                    };
+
+                    if (!this.chart) {
+                        const ctx = document.getElementById('transactionChart').getContext('2d');
+                        this.chart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: data,
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Distribusi Keuangan Bulanan'
                                     }
                                 }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        // Update existing chart data
+                        this.chart.data = data;
+                        this.chart.update();
+                    }
                 }
             }));
         });

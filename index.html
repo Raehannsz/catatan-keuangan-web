@@ -60,16 +60,21 @@
                 </div>
             </div>
             
-            <div class="filter-container mb-4">
-    <label for="monthFilter" class="form-label fw-bold">Tampilkan Bulan:</label>
-    <select id="monthFilter" class="form-select w-auto d-inline-block"
-        x-model="selectedMonth" @change="filterTransactions">
-        <option value="">Semua Bulan</option>
-        <template x-for="month in availableMonths" :key="month.value">
-            <option :value="month.value" x-text="month.label"></option>
-        </template>
-    </select>
-</div>
+            <div x-data="transactionFilter">
+                <!-- Input Date Range -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label for="startDate" class="form-label">Dari Tanggal</label>
+                        <input type="date" id="startDate" class="form-control" x-model="startDate">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="endDate" class="form-label">Sampai Tanggal</label>
+                        <input type="date" id="endDate" class="form-control" x-model="endDate">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-danger w-100" @click="resetDateFilter()">Reset Tanggal</button>
+                    </div>
+                </div>
 
 
                 <div class="transactions">
@@ -79,7 +84,7 @@
                             <p>Belum ada transaksi. Tambahkan transaksi pertama Anda!</p>
                         </div>
                     </template>
-                    <template x-for="(transaction, index) in transactions" :key="index">
+                    <template x-for="(transaction, index) in filteredTransactions" :key="index">
                         <div class="transaction-item" :class="transaction.type === 'income' ? 'transaction-income' : 'transaction-expense'">
                             <div class="flex-grow-1">
                                 <div class="fw-bold" x-text="transaction.desc"></div>
