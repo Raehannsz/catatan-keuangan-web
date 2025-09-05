@@ -40,10 +40,20 @@
                         <label for="description">Deskripsi</label>
                         <input type="text" id="description" x-model="desc" placeholder="Contoh: Gaji Bulanan">
                     </div>
-                    <div class="form-group">
-                        <label for="amount">Jumlah (Rp)</label>
-                        <input type="number" id="amount" x-model="amount" placeholder="Contoh: 2500000">
-                    </div>
+                    <div x-data="{ amount: '', formattedAmount: '' }" class="form-group">
+                      <label for="amount">Jumlah (Rp)</label>
+                      <input
+                          type="text"
+                          id="amount"
+                          x-model="formattedAmount"
+                          @input="
+                              let raw = $event.target.value.replace(/\D/g, '');
+                              amount = raw;
+                              formattedAmount = new Intl.NumberFormat('id-ID').format(raw);
+                          "
+                          placeholder="Contoh: 2.500.000"
+                      >
+                  </div>
                     <div class="form-group">
                         <label for="type">Jenis Transaksi</label>
                         <select id="type" x-model="type">
