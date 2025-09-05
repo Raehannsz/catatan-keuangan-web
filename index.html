@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Keuangan Pribadi</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <div class="container" x-data="financeApp">
+        <header>
+            <h1>Aplikasi Keuangan Pribadi</h1>
+            <p>Kelola pemasukan dan pengeluaran Anda dengan mudah</p>
+        </header>
+
+        <div class="balance-card">
+            <h2>Saldo Anda</h2>
+            <div class="balance-amount" x-text="formatCurrency(balance)"></div>
+        </div>
+
+        <div class="summary">
+            <div class="income-card">
+                <h3>Pemasukan</h3>
+                <p x-text="formatCurrency(totalIncome)"></p>
+            </div>
+            <div class="expense-card">
+                <h3>Pengeluaran</h3>
+                <p x-text="formatCurrency(totalExpense)"></p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div>
+                <div class="form-container">
+                    <h2>Tambah Transaksi</h2>
+                    <div class="form-group">
+                        <label for="description">Deskripsi</label>
+                        <input type="text" id="description" x-model="desc" placeholder="Contoh: Gaji Bulanan">
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Jumlah (Rp)</label>
+                        <input type="number" id="amount" x-model="amount" placeholder="Contoh: 2500000">
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Jenis Transaksi</label>
+                        <select id="type" x-model="type">
+                            <option value="income">Pemasukan</option>
+                            <option value="expense">Pengeluaran</option>
+                        </select>
+                    </div>
+                    <button @click="addTransaction()">Tambah Transaksi</button>
+                </div>
+
+                <div class="transactions">
+                    <h2>Riwayat Transaksi</h2>
+                    <template x-if="transactions.length === 0">
+                        <div class="empty-state">
+                            <p>Belum ada transaksi. Tambahkan transaksi pertama Anda!</p>
+                        </div>
+                    </template>
+                    <template x-for="(transaction, index) in transactions" :key="index">
+                        <div class="transaction-item" :class="transaction.type === 'income' ? 'transaction-income' : 'transaction-expense'">
+                            <div class="transaction-desc" x-text="transaction.desc"></div>
+                            <div class="transaction-amount" x-text="formatCurrency(transaction.amount)"></div>
+                            <button class="delete-btn" @click="removeTransaction(index)">Hapus</button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2>Grafik Keuangan</h2>
+                <canvas id="transactionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>s
