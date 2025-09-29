@@ -32,6 +32,11 @@
             </div>
         </div>
 
+        <div class="chart-container text-center justify-content-center">
+            <h2>Grafik Keuangan</h2>
+            <canvas id="transactionChart"></canvas>
+        </div>
+
         <div class="main-content">
             <div class="form-chart-wrapper">
                 <!-- Form Tambah Transaksi -->
@@ -95,10 +100,6 @@
                             <button class="delete-btn" @click="removeTransaction(index)">Hapus</button>
                         </div>
                     </template>
-                </div>
-                <div class="chart-container text-center justify-content-center">
-                    <h2>Grafik Keuangan</h2>
-                    <canvas id="transactionChart"></canvas>
                 </div>
             </div>
         </div>
