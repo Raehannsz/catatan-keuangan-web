@@ -41,6 +41,9 @@ document.addEventListener('alpine:init', () => {
                         return txDate >= start && txDate <= end;
                     });
                 },
+                get isFilteredEmpty() {
+                    return this.filteredTransactions.length === 0;
+                },
 
                 resetDateFilter() {
                 this.startDate = '';
