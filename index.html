@@ -85,11 +85,15 @@
 
                 <div class="transactions">
                     <h2>Riwayat Transaksi</h2>
-                    <template x-if="transactions.length === 0">
+
+                    <!-- Tampilkan pesan jika tidak ada hasil setelah filter -->
+                    <template x-if="filteredTransactions.length === 0">
                         <div class="empty-state">
-                            <p>Belum ada transaksi. Tambahkan transaksi pertama Anda!</p>
+                            <p>Tidak ada transaksi dalam rentang tanggal yang dipilih.</p>
                         </div>
                     </template>
+
+                    <!-- Tampilkan transaksi jika ada -->
                     <template x-for="(transaction, index) in filteredTransactions" :key="index">
                         <div class="transaction-item" :class="transaction.type === 'income' ? 'transaction-income' : 'transaction-expense'">
                             <div class="flex-grow-1">
