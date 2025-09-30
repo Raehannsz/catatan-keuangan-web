@@ -86,9 +86,11 @@
 
                 <div class="riwayat-transaksi">
                     <h2>Riwayat Transaksi</h2>
-                    <select x-model="sortOrder" class="form-select mb-2">
-                        <option value="desc">Terbaru ke Terlama</option>
-                        <option value="asc">Terlama ke Terbaru</option>
+                    <select x-model="sortOrder" class="form-select mb-3">
+                        <option value="desc">Tanggal: Terbaru ke Terlama</option>
+                        <option value="asc">Tanggal: Terlama ke Terbaru</option>
+                        <option value="bulanAsc">Bulan: Januari → Desember</option>
+                        <option value="bulanDesc">Bulan: Desember → Januari</option>
                     </select>
 
                     <!-- Tampilkan pesan jika tidak ada hasil setelah filter -->
