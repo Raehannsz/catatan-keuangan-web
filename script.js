@@ -9,6 +9,8 @@ document.addEventListener('alpine:init', () => {
                 startDate: '',
                 endDate: '',
                 sortOrder: 'desc',
+                selectedMonth: '',
+
 
                 formatDate(dateStr) {
                     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -64,6 +66,17 @@ document.addEventListener('alpine:init', () => {
 
                         return 0; // default: tidak diurutkan
                     });
+
+                    if (this.selectedMonth !== '') {
+                        data = data.filter(t => {
+                            const txDate = new Date(t.date);
+                            // getMonth() dari 0-11, selectedMonth dari 1-12
+                            return (txDate.getMonth() + 1).toString().padStart(2, '0') === this.selectedMonth;
+                        });
+                    }
+
+                    // Urutkan default berdasarkan tanggal terbaru
+                    data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
                     return data;
                 },
