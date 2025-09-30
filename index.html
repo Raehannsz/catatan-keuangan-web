@@ -83,8 +83,12 @@
                 </div>
 
 
-                <div class="transactions">
+                <div class="riwayat-transaksi">
                     <h2>Riwayat Transaksi</h2>
+                    <select x-model="sortOrder" class="form-select mb-2">
+                        <option value="desc">Terbaru ke Terlama</option>
+                        <option value="asc">Terlama ke Terbaru</option>
+                    </select>
 
                     <!-- Tampilkan pesan jika tidak ada hasil setelah filter -->
                     <template x-if="filteredTransactions.length === 0">
@@ -105,7 +109,7 @@
                         </div>
                     </template>
                 </div>
-                <button class="btn btn-danger" @click="hapusSemuaTransaksi" :disabled="transactions.length === 0">Hapus semua transaksi?</button>
+                <button class="btn btn-danger mt-2" @click="hapusSemuaTransaksi" :disabled="transactions.length === 0">Hapus semua transaksi?</button>
             </div>
         </div>
     </div>
