@@ -32,9 +32,9 @@ document.addEventListener('alpine:init', () => {
                 },
 
                 get filteredTransactions() {
-                    let data = [...this.transactions]; // copy array untuk di-sort
+                    let data = [...this.transactions];
 
-                    // Filter berdasarkan rentang tanggal jika ada
+                    // Filter berdasarkan tanggal
                     if (this.startDate && this.endDate) {
                         const start = new Date(this.startDate);
                         const end = new Date(this.endDate);
@@ -45,13 +45,24 @@ document.addEventListener('alpine:init', () => {
                         });
                     }
 
-                    // Urutkan berdasarkan tanggal
+                    // Sorting
                     data.sort((a, b) => {
                         const dateA = new Date(a.date);
                         const dateB = new Date(b.date);
-                        return this.sortOrder === 'asc'
-                            ? dateA - dateB
-                            : dateB - dateA;
+
+                        if (this.sortOrder === 'asc') {
+                            return dateA - dateB;
+                        } else if (this.sortOrder === 'desc') {
+                            return dateB - dateA;
+                        } else if (this.sortOrder === 'bulanAsc') {
+                            // Urutkan dari Januari ke Desember (berdasarkan bulan)
+                            return dateA.getMonth() - dateB.getMonth();
+                        } else if (this.sortOrder === 'bulanDesc') {
+                            // Urutkan dari Desember ke Januari
+                            return dateB.getMonth() - dateA.getMonth();
+                        }
+
+                        return 0; // default: tidak diurutkan
                     });
 
                     return data;
