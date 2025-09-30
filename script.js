@@ -36,7 +36,7 @@ document.addEventListener('alpine:init', () => {
                 get filteredTransactions() {
                     let data = [...this.transactions];
 
-                    // Filter berdasarkan tanggal
+                    // Filter berdasarkan rentang tanggal
                     if (this.startDate && this.endDate) {
                         const start = new Date(this.startDate);
                         const end = new Date(this.endDate);
@@ -47,7 +47,16 @@ document.addEventListener('alpine:init', () => {
                         });
                     }
 
-                    // Sorting
+                    // Filter berdasarkan bulan (jika dipilih)
+                    if (this.selectedMonth !== '') {
+                        data = data.filter(t => {
+                            const txDate = new Date(t.date);
+                            // getMonth() 0–11, kita bandingkan dengan string "01"–"12"
+                            return (txDate.getMonth() + 1).toString().padStart(2, '0') === this.selectedMonth;
+                        });
+                    }
+
+                    // Sorting berdasarkan sortOrder
                     data.sort((a, b) => {
                         const dateA = new Date(a.date);
                         const dateB = new Date(b.date);
@@ -57,26 +66,13 @@ document.addEventListener('alpine:init', () => {
                         } else if (this.sortOrder === 'desc') {
                             return dateB - dateA;
                         } else if (this.sortOrder === 'bulanAsc') {
-                            // Urutkan dari Januari ke Desember (berdasarkan bulan)
                             return dateA.getMonth() - dateB.getMonth();
                         } else if (this.sortOrder === 'bulanDesc') {
-                            // Urutkan dari Desember ke Januari
                             return dateB.getMonth() - dateA.getMonth();
                         }
 
-                        return 0; // default: tidak diurutkan
+                        return 0;
                     });
-
-                    if (this.selectedMonth !== '') {
-                        data = data.filter(t => {
-                            const txDate = new Date(t.date);
-                            // getMonth() dari 0-11, selectedMonth dari 1-12
-                            return (txDate.getMonth() + 1).toString().padStart(2, '0') === this.selectedMonth;
-                        });
-                    }
-
-                    // Urutkan default berdasarkan tanggal terbaru
-                    data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
                     return data;
                 },
