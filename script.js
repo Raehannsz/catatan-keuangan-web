@@ -8,6 +8,7 @@ document.addEventListener('alpine:init', () => {
                 chart: null,
                 startDate: '',
                 endDate: '',
+                sortOrder: 'desc',
 
                 formatDate(dateStr) {
                     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -31,16 +32,31 @@ document.addEventListener('alpine:init', () => {
                 },
 
                 get filteredTransactions() {
-                    if (!this.startDate || !this.endDate) return this.transactions;
+                    let data = [...this.transactions]; // copy array untuk di-sort
 
-                    const start = new Date(this.startDate);
-                    const end = new Date(this.endDate);
+                    // Filter berdasarkan rentang tanggal jika ada
+                    if (this.startDate && this.endDate) {
+                        const start = new Date(this.startDate);
+                        const end = new Date(this.endDate);
 
-                    return this.transactions.filter(t => {
-                        const txDate = new Date(t.date);
-                        return txDate >= start && txDate <= end;
+                        data = data.filter(t => {
+                            const txDate = new Date(t.date);
+                            return txDate >= start && txDate <= end;
+                        });
+                    }
+
+                    // Urutkan berdasarkan tanggal
+                    data.sort((a, b) => {
+                        const dateA = new Date(a.date);
+                        const dateB = new Date(b.date);
+                        return this.sortOrder === 'asc'
+                            ? dateA - dateB
+                            : dateB - dateA;
                     });
+
+                    return data;
                 },
+
                 get isFilteredEmpty() {
                     return this.filteredTransactions.length === 0;
                 },
