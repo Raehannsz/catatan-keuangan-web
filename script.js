@@ -136,14 +136,6 @@ document.addEventListener('alpine:init', () => {
                     // Update chart
                     this.updateChart();
                 },
-
-                hapusSemuaTransaksi() {
-                    if (confirm('Apakah Anda yakin ingin menghapus semua transaksi?')) {
-                        this.transactions = [];
-                        this.saveTransactions();
-                        this.updateChart();      
-                    }
-                },
                 
                 removeTransaction(index) {
                     if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
