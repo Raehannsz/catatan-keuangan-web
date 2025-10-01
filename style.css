@@ -150,6 +150,12 @@ button:hover {
     padding: 30px;
     color: #6b7280;
 }
+.riwayat-transaksi {
+    max-height: 500px; /* Atur sesuai kebutuhan */
+    overflow-y: auto;
+    padding-right: 10px; /* Untuk menghindari scrollbar menutupi konten */
+}
+
 
 @media (min-width: 768px) {
     .main-content {
